@@ -35,11 +35,17 @@ Each device's CI checks out a **pinned tag** (for example `v0.1.0`), so a device
 
 Requires the ESP32 Arduino core 3.x (built and tested with 3.3.13).
 
+## Boards
+
+The devices use different boards: ESP32 DEVKITV1 (ESP-WROOM-32) for esp32-door and esp32-shed, ESP32-DevKitC-V4 (ESP32-WROOM-32UE, external antenna, no user LED) for esp32-garage. All build as **ESP32 Dev Module** with the **Minimal SPIFFS** partition scheme (1.9 MB app slots with OTA, 128 KB SPIFFS, which no device uses).
+
+**The library has no board-specific code:** no pin numbers, LED handling or board checks. Anything that depends on the board stays in the device's `settings.h` and is passed to the library.
+
 ## Develop
 
 ```bash
 make -C tests/host                                                     # host unit tests
-arduino-cli compile --fqbn esp32:esp32:esp32 --library . examples/wifi_diag_basic
+arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --library . examples/wifi_diag_basic
 ```
 
 **Versions:** bump `version` in `library.properties` and `ESP32_IOT_COMMON_VERSION` in `src/esp32_iot_common.h` together, add a line to `CHANGELOG.md`, merge, then tag `vX.Y.Z` on `main`.
