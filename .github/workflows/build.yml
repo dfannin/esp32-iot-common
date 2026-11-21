@@ -1,0 +1,31 @@
+# Check the library on every push: host unit tests and a compile of the example.
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  host-tests:
+    name: Host unit tests (stats_util)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make -C tests/host
+
+  compile:
+    name: Compile the example (Arduino core 3.x)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install the ESP32 core
+        run: |
+          arduino-cli config init
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          # The same core as the device repos (core 4.0.0 makes esp32-shed too big)
+          arduino-cli core install esp32:esp32@3.3.13
+      - name: Compile examples/wifi_diag_basic with this library
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 --warnings default --library . examples/wifi_diag_basic
