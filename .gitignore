@@ -1,0 +1,12 @@
+# Host test binary
+tests/host/test_stats_util
+
+# Arduino build output
+build/
+*.bin
+*.elf
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store

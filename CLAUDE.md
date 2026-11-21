@@ -1,0 +1,29 @@
+# CLAUDE.md — esp32-iot-common
+
+Arduino library shared by the ESP32 device firmware (`esp32-door`, `esp32-shed`, `esp32-garage`). Part of the home IoT platform; the plan is in `dfannin/iot-platform` `docs/architecture.md` §6 (shared firmware library) and §15.2 (phases 5–6).
+
+## Rules that must not be broken
+
+1. **No secrets or personal identifiers.** This repository is public. No WiFi or MQTT credentials, certificates, IP or MAC addresses; examples use placeholders.
+2. **Memory matters** (architecture §6.1): fixed-size buffers, no growth on the heap in the loop, `PROGMEM` for large constant text. New optional features go behind compile-time switches (`IOT_FEATURE_*`) so a device that does not use them pays nothing.
+3. **Low power** (architecture §6.2): no busy loops; the radio in short bursts.
+4. **Devices connect with TLS only** (architecture decision A9): no plain-text MQTT fallback in library code.
+5. **One version, one tag.** `library.properties` `version` and `ESP32_IOT_COMMON_VERSION` change together; devices pin a tag in CI.
+
+## Environment
+
+- ESP32 Arduino core 3.3.13 (pinned in CI, like the device repositories).
+- Host tests: `g++` with C++17.
+
+## Commands
+
+```bash
+make -C tests/host
+arduino-cli compile --fqbn esp32:esp32:esp32 --library . examples/wifi_diag_basic
+```
+
+## Working style
+
+- Move code from a device into the library unchanged first; change behaviour in a separate commit.
+- Keep logic that can run without hardware in plain C++ headers (like `stats_util.h`) and test it on the host.
+- Small, readable code; documents in GitHub Markdown.
