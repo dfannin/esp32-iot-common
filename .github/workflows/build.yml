@@ -27,5 +27,5 @@ jobs:
           arduino-cli core update-index
           # The same core as the device repos (core 4.0.0 makes esp32-shed too big)
           arduino-cli core install esp32:esp32@3.3.13
-      - name: Compile examples/wifi_diag_basic with this library
-        run: arduino-cli compile --fqbn esp32:esp32:esp32 --warnings default --library . examples/wifi_diag_basic
+      - name: Compile examples/wifi_diag_basic with this library (Minimal SPIFFS, as every device)
+        run: arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --warnings default --library . examples/wifi_diag_basic
