@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- `iot_time`: `IotTime`, NTP time with a POSIX time zone (daylight saving automatic): `begin()` waits a limited time for the first sync (SNTP keeps trying in the background), `loop()` picks up a late sync, `synced()`, `epoch()`, `timestamp()`. Also `uptimeMillis()` and `uptimeSeconds()` from the 64-bit timer. Replaces each device's `setupTime()`, `getTimestamp()`, `getEpochTime()` and uptime helpers (iot-platform architecture §6, phase 6 step 4).
+- One change from the door and shed code: `timestamp()` no longer waits up to 5 s when the time is not synced (the garage already did this).
+- Example `time_basic`; host tests for `IotTime` with fake SNTP functions.
+
 ## 0.2.0
 
 - `iot_mqtt`: `IotMqtt`, MQTT over TLS with a last will and a reconnect schedule (15 s for 5 minutes after boot or a lost connection, then 60 s), a 10 s TLS handshake limit, and counters and the last error for `/status`. TLS only with the CA certificate checked: no plain-text or insecure mode. Replaces each device's own connect/retry code (iot-platform architecture §6, phase 6 step 4).

@@ -2,6 +2,7 @@
 #pragma once
 #include <cstdint>
 #include <cstdio>
+#include <ctime>
 #include <string>
 
 extern uint32_t fake_millis;
@@ -19,6 +20,12 @@ class String {
 
 struct FakeSerial {
   template <typename... A> void printf(const char* f, A... a) { std::printf(f, a...); }
+  void print(const char* s) { std::printf("%s", s); }
   void println(const char* s = "") { std::printf("%s\n", s); }
 };
 extern FakeSerial Serial;
+
+// Time functions of the ESP32 core (esp32-hal-time); defined by the tests that use them.
+void configTzTime(const char* tz, const char* server1, const char* server2 = nullptr,
+                  const char* server3 = nullptr);
+bool getLocalTime(struct tm* info, uint32_t ms = 5000);
