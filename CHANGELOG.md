@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- `iot_ota` is opt-in: `esp32_iot_common.h` no longer includes it, and it is header-only (`iot_ota.cpp` removed). In 0.4.0 every sketch using the library linked the core's ArduinoOTA and mDNS code, 38–45 KB of flash even without OTA (the CI examples grew from 0.3.0 to 0.4.0: `mqtt_basic` +37.9 KB, `time_basic` +38.8 KB, `wifi_diag_basic` +44.7 KB). This breaks the rule that an unused feature costs nothing (CLAUDE.md rule 3).
+- **Change for sketches:** a sketch that uses `IotOta` adds `#include <iot_ota.h>` after `#include <esp32_iot_common.h>`. Without it, 0.5.0 does not compile for such a sketch, hence the minor version step. No other change; `IotOta` behaves as in 0.4.0.
+
 ## 0.4.0
 
 - `iot_ota`: `IotOta`, over-the-air updates from the Arduino tools (`ArduinoOTA` with host name and password) and mDNS (`<host>.local` with the `http` and `ota` services). An optional function runs when an update starts (the garage releases its outputs there in M3). Replaces each device's `setupOTA()` and mDNS code (iot-platform architecture §6, phase 6 step 4).
