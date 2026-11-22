@@ -6,7 +6,7 @@ Arduino library shared by the ESP32 device firmware (`esp32-door`, `esp32-shed`,
 
 1. **No board-specific code.** The devices use different boards (ESP32 DEVKITV1 with ESP-WROOM-32 for esp32-door and esp32-shed; ESP32-DevKitC-V4 with ESP32-WROOM-32UE, external antenna and no user LED, for esp32-garage). The library has no pin numbers, LED handling or board checks; anything board-specific stays in the device's `settings.h` and is passed to the library (a function argument or a setting).
 2. **No secrets or personal identifiers.** This repository is public. No WiFi or MQTT credentials, certificates, IP or MAC addresses; examples use placeholders.
-3. **Memory matters** (architecture §6.1): fixed-size buffers, no growth on the heap in the loop, `PROGMEM` for large constant text. New optional features go behind compile-time switches (`IOT_FEATURE_*`) so a device that does not use them pays nothing.
+3. **Memory matters** (architecture §6.1): fixed-size buffers, no growth on the heap in the loop, `PROGMEM` for large constant text. New optional features go behind compile-time switches (`IOT_FEATURE_*`) or are opt-in headers that `esp32_iot_common.h` does not include (like `iot_ota.h`, header-only so no library `.cpp` pulls in ArduinoOTA), so a device that does not use them pays nothing. Check the example sizes in CI when adding a module.
 4. **Low power** (architecture §6.2): no busy loops; the radio in short bursts.
 5. **Devices connect with TLS only** (architecture decision A9): no plain-text MQTT fallback in library code.
 6. **One version, one tag.** `library.properties` `version` and `ESP32_IOT_COMMON_VERSION` change together; devices pin a tag in CI.

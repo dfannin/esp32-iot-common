@@ -6,6 +6,7 @@
 
 #include <WiFi.h>
 #include <esp32_iot_common.h>
+#include <iot_ota.h>  // opt-in module, not included by esp32_iot_common.h
 
 const char* WIFI_SSID = "your-network";
 const char* WIFI_PASSWORD = "your-password";
