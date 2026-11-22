@@ -1,0 +1,41 @@
+# Tag each release automatically: after a merge to main, create the tag
+# v<version> from library.properties if it does not exist yet. Devices pin
+# these tags in their CI, so a release is just a merged version bump.
+name: tag
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write  # to push the tag (GITHUB_TOKEN; no other access)
+
+jobs:
+  tag:
+    name: Tag the version from library.properties
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # all tags, to see whether this version is tagged
+
+      - name: Create v<version> if missing
+        run: |
+          version=$(sed -n 's/^version=//p' library.properties)
+          header=$(sed -n 's/^#define ESP32_IOT_COMMON_VERSION "\(.*\)"$/\1/p' src/esp32_iot_common.h)
+          if ! echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::library.properties version '$version' is not X.Y.Z"; exit 1
+          fi
+          if [ "$version" != "$header" ]; then
+            echo "::error::library.properties ($version) and ESP32_IOT_COMMON_VERSION ($header) differ"; exit 1
+          fi
+          tag="v$version"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "$tag already exists ($(git rev-list -n 1 "$tag")), nothing to do"
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              tag -a "$tag" -m "esp32-iot-common $version"
+          git push origin "$tag"
+          echo "Created $tag on $(git rev-parse --short HEAD)"
