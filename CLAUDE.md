@@ -15,13 +15,14 @@ Arduino library shared by the ESP32 device firmware (`esp32-door`, `esp32-shed`,
 
 - ESP32 Arduino core 3.3.13 (pinned in CI, like the device repositories).
 - Every device builds with the ESP32 Dev Module and the **Minimal SPIFFS** partition scheme (1.9 MB app slots with OTA; iot-platform architecture §6.1), so CI compiles the example the same way.
-- Host tests: `g++` with C++17.
+- Host tests: `g++` with C++17; `tests/host/fakes/` has small stand-ins for Arduino, WiFi, WiFiClientSecure and PubSubClient so Arduino-facing modules (like `iot_mqtt`) can be tested on the host.
+- Dependency: PubSubClient (Library Manager).
 
 ## Commands
 
 ```bash
 make -C tests/host
-arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --library . examples/wifi_diag_basic
+for ex in examples/*/; do arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --library . "$ex"; done
 ```
 
 ## Working style
