@@ -13,7 +13,7 @@ Shared Arduino library for the home IoT ESP32 devices: [esp32-door](https://gith
 | `wifi_diag.h` / `.cpp` | WiFi and antenna diagnostics: RSSI sampling and history, gateway ping, reception tests, access-point scan, roaming to a stronger access point (global object `wifiDiag`) |
 | `stats_util.h` | `percentile()` and `shouldRoam()`, no Arduino dependencies, host-tested |
 
-Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS. the device web page, the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
+Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS. The device web page, the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
 
 Requires the **PubSubClient** library (Library Manager).
 
