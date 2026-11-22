@@ -4,6 +4,7 @@ tests/host/test_iot_mqtt
 tests/host/test_iot_time
 tests/host/test_iot_ota
 tests/host/test_iot_status
+tests/host/test_iot_version
 
 # Arduino build output
 build/

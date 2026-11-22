@@ -8,11 +8,13 @@ on:
 
 jobs:
   host-tests:
-    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime, IotOta, iot_status)
+    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime, IotOta, iot_status, iot_version, fw_version.sh)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: make -C tests/host
+      - name: Test tools/fw_version.sh
+        run: sh tests/test_fw_version.sh
 
   compile:
     name: Compile the examples (Arduino core 3.x)
