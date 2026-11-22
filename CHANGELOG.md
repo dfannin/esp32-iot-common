@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
+
+- `iot_mqtt`: `IotMqtt`, MQTT over TLS with a last will and a reconnect schedule (15 s for 5 minutes after boot or a lost connection, then 60 s), a 10 s TLS handshake limit, and counters and the last error for `/status`. TLS only with the CA certificate checked: no plain-text or insecure mode. Replaces each device's own connect/retry code (iot-platform architecture §6, phase 6 step 4).
+- `retry_schedule.h`: the reconnect timing and MQTT state texts, host-tested (with stand-ins for Arduino, WiFi, TLS and PubSubClient in `tests/host/fakes/`).
+- Example `mqtt_basic`; CI compiles all examples and installs PubSubClient (now a dependency).
+
+## 0.1.1 (not tagged)
 
 - Documentation and CI only: rule against board-specific code (README "Boards", CLAUDE.md); CI compiles the example with the Minimal SPIFFS partition scheme, as every device now does.
 

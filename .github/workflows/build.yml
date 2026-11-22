@@ -8,24 +8,29 @@ on:
 
 jobs:
   host-tests:
-    name: Host unit tests (stats_util)
+    name: Host unit tests (stats_util, retry schedule, IotMqtt)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: make -C tests/host
 
   compile:
-    name: Compile the example (Arduino core 3.x)
+    name: Compile the examples (Arduino core 3.x)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: arduino/setup-arduino-cli@v2
-      - name: Install the ESP32 core
+      - name: Install the ESP32 core and PubSubClient
         run: |
           arduino-cli config init
           arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
           arduino-cli core update-index
           # The same core as the device repos (core 4.0.0 makes esp32-shed too big)
           arduino-cli core install esp32:esp32@3.3.13
-      - name: Compile examples/wifi_diag_basic with this library (Minimal SPIFFS, as every device)
-        run: arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --warnings default --library . examples/wifi_diag_basic
+          arduino-cli lib install PubSubClient
+      - name: Compile the examples with this library (Minimal SPIFFS, as every device)
+        run: |
+          for ex in examples/*/; do
+            echo "== $ex"
+            arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --warnings default --library . "$ex"
+          done

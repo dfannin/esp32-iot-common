@@ -6,12 +6,16 @@
 //   #include <esp32_iot_common.h>
 //
 // Modules:
-//   wifi_diag.h   WiFi and antenna diagnostics, roaming (global object wifiDiag)
-//   stats_util.h  percentile() and shouldRoam(), no Arduino dependencies
+//   iot_mqtt.h        MQTT over TLS with a last will and a reconnect schedule (IotMqtt)
+//   wifi_diag.h       WiFi and antenna diagnostics, roaming (global object wifiDiag)
+//   stats_util.h      percentile() and shouldRoam(), no Arduino dependencies
+//   retry_schedule.h  reconnect timing and MQTT state texts, no Arduino dependencies
 
 #pragma once
 
-#define ESP32_IOT_COMMON_VERSION "0.1.0"
+#define ESP32_IOT_COMMON_VERSION "0.2.0"
 
+#include "iot_mqtt.h"
+#include "retry_schedule.h"
 #include "stats_util.h"
 #include "wifi_diag.h"
