@@ -73,7 +73,7 @@ static void test_device() {
   IotTime ntp;  // not synced
   String d = iotStatusDevice(config(), ntp, ESP_RST_POWERON, 2);
   CHECK(has(d, "\"device\":{\"name\":\"backyard00\",\"firmware\":\"261122-1530\",\"build\":\"a1b2c3d\","));
-  CHECK(has(d, "\"board\":\"ESP32 DEVKITV1 (ESP-WROOM-32)\""));
+  CHECK(has(d, "\"chip\":\"ESP32-D0WD-V3 rev 3\",\"board\":\"ESP32 DEVKITV1 (ESP-WROOM-32)\""));
   CHECK(has(d, "\"cpu_speed\":80,"));
   CHECK(has(d, "\"mac\":\"AA:BB:CC:DD:EE:FF\",\"ip\":\"10.0.0.5\""));
   CHECK(has(d, "\"uptime\":3600,"));

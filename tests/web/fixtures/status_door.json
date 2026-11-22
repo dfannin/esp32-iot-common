@@ -1,0 +1,11 @@
+{
+  "device": {"name": "backyard00", "firmware": "261122-0552", "build": "244d03e", "chip": "ESP32-D0WD-V3 rev 3",
+             "board": "ESP32 DEVKITV1 (ESP-WROOM-32)", "cpu_speed": 80, "mac": "AA:BB:CC:DD:EE:FF", "ip": "192.168.1.140",
+             "uptime": 3725, "time": "2026-11-21T21:55:12", "time_synced": true, "reset_reason": "SOFTWARE",
+             "free_heap": 143832, "min_free_heap": 128288, "wifi_reconnects": 0},
+  "sensors": [{"name": "Backyard Gate", "type": "door", "state": "CLOSED", "pin": 18, "topic": "sensor/backyard/gate01"}],
+  "network": {"ssid": "home", "rssi": -54, "bssid": "11:22:33:44:55:66", "channel": 9, "hostname": "backyard00"},
+  "mqtt": {"broker": "192.168.1.112", "port": 8883, "user": "backyard00", "connected": true, "connects": 2,
+           "failed_attempts": 0, "last_error": "", "last_error_uptime": 0,
+           "status_topic": "sensor/backyard/status", "telemetry_topic": "telemetry/backyard/device"}
+}

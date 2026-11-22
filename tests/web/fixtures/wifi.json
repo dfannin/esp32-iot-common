@@ -1,0 +1,7 @@
+{"ssid": "home", "rssi": -60, "bssid": "11:22:33:44:55:66", "channel": 9, "tx_power_dbm": 15, "modem_sleep": true,
+ "ip": "192.168.1.140", "gateway": "192.168.1.1",
+ "roaming": {"enabled": true, "interval_s": 7200, "margin_db": 8, "checking": false, "next_check_s": 600,
+             "checks": 4, "roams": 1, "last_roam_epoch": 0, "last_result": "no stronger access point"},
+ "window": {"rssi": -60, "rssi_min": -66, "rssi_max": -55, "rssi_std": 2.1, "ping_sent": 0, "samples": 300},
+ "history": [-60, -61, -59, -62],
+ "test": {"running": false}}

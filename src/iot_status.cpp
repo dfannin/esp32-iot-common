@@ -14,6 +14,7 @@ String iotStatusDevice(const IotStatusConfig& cfg, const IotTime& ntp, esp_reset
   j += jsonText("name", cfg.name) + ",";
   j += jsonText("firmware", cfg.firmware) + ",";
   j += jsonText("build", cfg.build) + ",";
+  j += jsonText("chip", String(ESP.getChipModel()) + " rev " + String((int)ESP.getChipRevision())) + ",";
   j += jsonText("board", cfg.board) + ",";
   j += "\"cpu_speed\":" + String(getCpuFrequencyMhz()) + ",";
   j += jsonText("mac", WiFi.macAddress()) + ",";

@@ -18,6 +18,11 @@ class String {
   String(unsigned int v) : s_(std::to_string(v)) {}
   String(long v) : s_(std::to_string(v)) {}
   String(unsigned long v) : s_(std::to_string(v)) {}
+  String(double v, int decimals) {
+    char buf[32];
+    std::snprintf(buf, sizeof(buf), "%.*f", decimals, v);
+    s_ = buf;
+  }
   String& operator=(const char* s) { s_ = s ? s : ""; return *this; }
   String& operator+=(const String& o) { s_ += o.s_; return *this; }
   String& operator+=(const char* o) { s_ += o ? o : ""; return *this; }
@@ -28,6 +33,10 @@ class String {
   unsigned int length() const { return (unsigned int)s_.size(); }
   char charAt(unsigned int i) const { return i < s_.size() ? s_[i] : 0; }
   void reserve(unsigned int n) { s_.reserve(n); }
+  void trim() {
+    size_t a = s_.find_first_not_of(" \t\r\n"), b = s_.find_last_not_of(" \t\r\n");
+    s_ = a == std::string::npos ? "" : s_.substr(a, b - a + 1);
+  }
   int indexOf(const char* t) const { auto p = s_.find(t); return p == std::string::npos ? -1 : (int)p; }
   friend String operator+(const String& a, const String& b) { return String(a.s_ + b.s_); }
   friend String operator+(const String& a, const char* b) { return String(a.s_ + (b ? b : "")); }
@@ -53,8 +62,12 @@ extern uint32_t fake_cpu_mhz;
 inline uint32_t getCpuFrequencyMhz() { return fake_cpu_mhz; }
 struct FakeEsp {
   uint32_t freeHeap = 0, minFreeHeap = 0;
+  const char* chipModel = "ESP32-D0WD-V3";
+  uint8_t chipRevision = 3;
   uint32_t getFreeHeap() { return freeHeap; }
   uint32_t getMinFreeHeap() { return minFreeHeap; }
+  const char* getChipModel() { return chipModel; }
+  uint8_t getChipRevision() { return chipRevision; }
 };
 extern FakeEsp ESP;
 typedef enum {

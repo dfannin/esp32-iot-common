@@ -1,0 +1,15 @@
+{
+  "device": {"name": "garage00", "firmware": "261122-0558", "build": "13b623c", "chip": "ESP32-D0WD-V3 rev 3",
+             "board": "ESP32-DevKitC-V4 (ESP32-WROOM-32UE)", "cpu_speed": 160, "mac": "AA:BB:CC:DD:EE:01", "ip": "192.168.1.114",
+             "uptime": 13, "time": "", "time_synced": false, "reset_reason": "POWERON",
+             "free_heap": 123908, "min_free_heap": 110668, "wifi_reconnects": 1, "simulation": true},
+  "sensors": [
+    {"id": "left", "name": "Garage Left", "type": "garage_door", "state": "CLOSED", "light": true, "topic": "sensor/garage/left"},
+    {"id": "right", "name": "Garage Right", "type": "garage_door", "state": "OPEN", "light": false, "topic": "sensor/garage/right"}
+  ],
+  "network": {"ssid": "home", "rssi": -21, "bssid": "D8:EC:5E:94:B6:68", "channel": 7, "hostname": "garage00"},
+  "mqtt": {"broker": "192.168.1.112", "port": 8883, "user": "garage00", "connected": false, "connects": 1,
+           "failed_attempts": 3, "disconnected_s": 125, "last_error": "connect failed (rc=-2)", "last_error_uptime": 61,
+           "status_topic": "sensor/garage/status", "telemetry_topic": "telemetry/garage/device"},
+  "web_control": true
+}

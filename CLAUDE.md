@@ -30,3 +30,4 @@ for ex in examples/*/; do arduino-cli compile --fqbn esp32:esp32:esp32:Partition
 - Move code from a device into the library unchanged first; change behaviour in a separate commit.
 - Keep logic that can run without hardware in plain C++ headers (like `stats_util.h`) and test it on the host.
 - Small, readable code; documents in GitHub Markdown.
+- Web pages are edited in `web/` (real `.html`, `.css`, `.js`), never in the generated `src/iot_web_assets.h`: run `tools/web_embed.py` after editing and `node tests/web/run.js` (browser tests). The pages depend only on `/status` and the documented endpoints.
