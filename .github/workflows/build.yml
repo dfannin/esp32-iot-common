@@ -8,7 +8,7 @@ on:
 
 jobs:
   host-tests:
-    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime)
+    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime, IotOta)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
