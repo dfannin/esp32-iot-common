@@ -1,7 +1,7 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra -Werror
 
-TESTS = test_stats_util test_iot_mqtt test_iot_time test_iot_ota test_iot_status test_iot_version
+TESTS = test_stats_util test_iot_mqtt test_iot_time test_iot_ota test_iot_status test_iot_version test_iot_web
 
 test: $(TESTS)
 	for t in $(TESTS); do ./$$t || exit 1; done
@@ -23,6 +23,9 @@ test_iot_status: test_iot_status.cpp ../../src/iot_status.cpp ../../src/iot_stat
 
 test_iot_version: test_iot_version.cpp ../../src/iot_version.h
 	$(CXX) $(CXXFLAGS) -o $@ test_iot_version.cpp
+
+test_iot_web: test_iot_web.cpp ../../src/iot_web.h ../../src/web_args.h ../../src/iot_web_assets.h ../../src/iot_status.cpp ../../src/iot_mqtt.cpp ../../src/iot_time.cpp fakes/*.h
+	$(CXX) $(CXXFLAGS) -Ifakes -o $@ test_iot_web.cpp ../../src/iot_status.cpp ../../src/iot_mqtt.cpp ../../src/iot_time.cpp
 
 clean:
 	rm -f $(TESTS)

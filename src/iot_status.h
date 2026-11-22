@@ -13,7 +13,7 @@
 //   json += "," + iotStatusMqtt(statusConfig, mqtt) + "}";
 //
 // Fields (the same on every device):
-//   device:  name, firmware, build, board, cpu_speed, mac, ip, uptime, time, time_synced,
+//   device:  name, firmware, build, chip (read from the chip, e.g. "ESP32-D0WD-V3 rev 3"), board, cpu_speed, mac, ip, uptime, time, time_synced,
 //            reset_reason, free_heap, min_free_heap, wifi_reconnects (+ device extras)
 //   network: ssid, rssi, bssid, channel, hostname
 //   mqtt:    broker, port, user, connected, connects, failed_attempts,

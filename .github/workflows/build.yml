@@ -1,4 +1,5 @@
-# Check the library on every push: host unit tests and a compile of the example.
+# Check the library on every push: host unit tests, the web pages in a browser,
+# and a compile of every example.
 name: build
 
 on:
@@ -8,13 +9,32 @@ on:
 
 jobs:
   host-tests:
-    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime, IotOta, iot_status, iot_version, fw_version.sh)
+    name: Host unit tests (stats_util, retry schedule, IotMqtt, IotTime, IotOta, iot_status, iot_version, iot_web, fw_version.sh)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: make -C tests/host
       - name: Test tools/fw_version.sh
         run: sh tests/test_fw_version.sh
+
+  web:
+    name: Web pages (embedded files up to date, browser tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Embedded pages match web/ (tools/web_embed.py --check)
+        run: |
+          python3 tools/web_embed.py --check src/iot_web_assets.h IOT_WEB web/page.html web/style.css web/app.js
+          cd examples/web_basic && python3 ../../tools/web_embed.py --check web_device.h DEVICE web/device.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Browser tests (tests/web/run.js)
+        run: node tests/web/run.js
 
   compile:
     name: Compile the examples (Arduino core 3.x)

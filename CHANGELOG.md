@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0
+
+- `iot_web` (opt-in, header-only: `#include <iot_web.h>`): the web pages for every device (iot-platform architecture §6.5). One compressed page shell from flash; the browser draws it from `/status` with `/app.js`:
+  - **Home**: the common cards Device Identity (name, chip model, board, firmware with build), System Status (CPU speed, time, time sync, uptime, last reset, reconnects, free memory), Network Settings (SSID, signal quality, IP, MAC, mDNS host name, access point and channel), MQTT Status (status, failed attempts and last error when there are any, broker, port, username, status and telemetry topics), and the device's sensor cards (a default card for any sensor type).
+  - **WiFi**: the WiFi diagnostics page and its `/api/wifi...` endpoints, moved from the devices.
+  - **Device extensions** in the device's `/device.js`: `IOT.setup()` (title, icon, sensors heading), `IOT.card()` (sensor card per type), `IOT.page()` (own pages and tabs, shown conditionally), `IOT.banner()`, and controls `IOT.button()` (POST with optional confirmation), `IOT.toggle()`, `IOT.form()` (fields posted as parameters, filled from the device without overwriting edits), `IOT.action()`.
+  - C++: `IotWeb::begin()`, `addPage()`, `requireAuth()`, `sendJson()`, `sendResult()`; `web_args.h` checks numbers and switches sent by forms (`webParseLong`, `webParseFloat`, `webParseBool`).
+- Pages are edited as real files in `web/` and embedded compressed (gzip, about 60 % smaller) by `tools/web_embed.py`, which devices also use for their `device.js`; `--check` keeps the generated headers honest in CI.
+- `iot_status`: new `device.chip`, read from the chip (`ESP.getChipModel()` and revision), e.g. `ESP32-D0WD-V3 rev 3`.
+- Tests: `test_iot_web` (host, with `WebServer` and `wifi_diag` stand-ins) and `tests/web/run.js` (the pages in headless Chromium with fixture data: cards, tabs, controls, forms, the WiFi page), both in CI. Example `web_basic`.
+- Change from the devices' WiFi endpoints: `seconds` and `tx_power` are checked strictly (a value such as `60s` is rejected instead of read as 60).
+
 ## 0.7.0
 
 - Firmware versions (iot-platform architecture §6.4, O13): `tools/fw_version.sh` writes `version.h` in a sketch folder from git, with `FW_VERSION` = `YYMMDD-HHMM` from the committer time of `HEAD` in UTC (`-dirty` with uncommitted changes to tracked files) and `FW_BUILD` = the short commit hash. It rewrites the file only when it changes.
