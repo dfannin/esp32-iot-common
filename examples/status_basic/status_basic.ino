@@ -6,6 +6,9 @@
 
 #include <WebServer.h>
 #include <WiFi.h>
+#if __has_include("version.h")
+#include "version.h"  // from tools/fw_version.sh; without it FW_VERSION is "...-local"
+#endif
 #include <esp32_iot_common.h>
 
 const char* WIFI_SSID = "your-network";
@@ -37,7 +40,8 @@ void setup() {
   mqtt.begin(cfg, onMessage, nullptr);
 
   statusConfig.name = "example00";
-  statusConfig.firmware = "1.0.0";
+  statusConfig.firmware = FW_VERSION;
+  statusConfig.build = FW_BUILD;
   statusConfig.board = "ESP32 Dev Module";
   statusConfig.ssid = WIFI_SSID;
   statusConfig.mqttServer = cfg.server;

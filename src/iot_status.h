@@ -13,7 +13,7 @@
 //   json += "," + iotStatusMqtt(statusConfig, mqtt) + "}";
 //
 // Fields (the same on every device):
-//   device:  name, firmware, board, cpu_speed, mac, ip, uptime, time, time_synced,
+//   device:  name, firmware, build, board, cpu_speed, mac, ip, uptime, time, time_synced,
 //            reset_reason, free_heap, min_free_heap, wifi_reconnects (+ device extras)
 //   network: ssid, rssi, bssid, channel, hostname
 //   mqtt:    broker, port, user, connected, connects, failed_attempts,
@@ -30,7 +30,8 @@
 
 struct IotStatusConfig {
   const char* name = "";       // the MQTT client id, also the mDNS host name
-  const char* firmware = "";   // the device's version string
+  const char* firmware = "";   // FW_VERSION: "YYMMDD-HHMM", "-dirty" or "-local" (architecture §6.4)
+  const char* build = "";      // FW_BUILD: short commit hash, "" for -local builds
   const char* board = "";      // board description (board-specific, set by the device)
   const char* ssid = "";
   const char* mqttServer = "";

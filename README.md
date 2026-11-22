@@ -8,13 +8,15 @@ Shared Arduino library for the home IoT ESP32 devices: [esp32-door](https://gith
 |---|---|
 | `iot_mqtt.h` / `.cpp` | MQTT over TLS with a last will and a reconnect schedule (`IotMqtt`): fast retries for 5 minutes after boot or a lost connection, then every minute; 10 s TLS handshake limit; connect count and last error for `/status`. TLS only, the broker certificate is always checked |
 | `iot_status.h` / `.cpp` | The common sections of `/status` (`device`, `network`, `mqtt`), the same fields on every device, and the text helpers `jsonEscape()`, `htmlEscape()`, `u64ToString()`, `formatUptime()`, `resetReasonText()` |
+| `iot_version.h` | Firmware version: `FW_VERSION` (`YYMMDD-HHMM`, `-dirty`, `-local`) and `FW_BUILD` (commit hash) from the sketch's `version.h`, with the `-local` fallback; `iotVersionValid()` |
+| `tools/fw_version.sh` | Writes a sketch's `version.h` from git before each compile (committer time in UTC, `-dirty`, short hash) |
 | `iot_time.h` / `.cpp` | NTP time with a POSIX time zone (`IotTime`): limited wait at boot, late sync picked up in `loop()`, epoch and local timestamp; `uptimeMillis()` / `uptimeSeconds()` from the 64-bit timer |
 | `iot_ota.h` | Over-the-air updates from the Arduino tools and mDNS (`IotOta`): host name, password, `http` and `ota` services, optional function before an update starts. **Opt-in:** include `<iot_ota.h>` yourself; `esp32_iot_common.h` does not, so a sketch without OTA does not carry the core's ArduinoOTA and mDNS code (about 40 KB) |
 | `retry_schedule.h` | The reconnect timing and MQTT state texts, no Arduino dependencies, host-tested |
 | `wifi_diag.h` / `.cpp` | WiFi and antenna diagnostics: RSSI sampling and history, gateway ping, reception tests, access-point scan, roaming to a stronger access point (global object `wifiDiag`) |
 | `stats_util.h` | `percentile()` and `shouldRoam()`, no Arduino dependencies, host-tested |
 
-Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS (opt-in since 0.5.0), 0.6.0 the common `/status` sections and text helpers. The device web pages stay in each device (they are built differently); the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
+Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS (opt-in since 0.5.0), 0.6.0 the common `/status` sections and text helpers, 0.7.0 firmware versions. The device web pages stay in each device (they are built differently); the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
 
 Requires the **PubSubClient** library (Library Manager).
 
@@ -49,6 +51,16 @@ Requires the ESP32 Arduino core 3.x (built and tested with 3.3.13).
 The devices use different boards: ESP32 DEVKITV1 (ESP-WROOM-32) for esp32-door and esp32-shed, ESP32-DevKitC-V4 (ESP32-WROOM-32UE, external antenna, no user LED) for esp32-garage. All build as **ESP32 Dev Module** with the **Minimal SPIFFS** partition scheme (1.9 MB app slots with OTA, 128 KB SPIFFS, which no device uses).
 
 **The library has no board-specific code:** no pin numbers, LED handling or board checks. Anything that depends on the board stays in the device's `settings.h` and is passed to the library.
+
+## Firmware Versions
+
+Every device uses the same version convention (iot-platform architecture §6.4): `YYMMDD-HHMM` from the git committer time of the commit in UTC, `-dirty` for uncommitted changes, `-local` for a build without git, plus `FW_BUILD`, the short commit hash. The library itself keeps semantic versions.
+
+A device sketch includes its generated `version.h` before the library and uses `FW_VERSION` and `FW_BUILD` (see `iot_version.h`); the device lists `version.h` in its `.gitignore`. Before each compile:
+
+```bash
+~/Arduino/libraries/esp32-iot-common/tools/fw_version.sh .    # in the sketch folder
+```
 
 ## Develop
 

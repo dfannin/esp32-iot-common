@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.7.0
+
+- Firmware versions (iot-platform architecture §6.4, O13): `tools/fw_version.sh` writes `version.h` in a sketch folder from git, with `FW_VERSION` = `YYMMDD-HHMM` from the committer time of `HEAD` in UTC (`-dirty` with uncommitted changes to tracked files) and `FW_BUILD` = the short commit hash. It rewrites the file only when it changes.
+- `iot_version.h`: the `-local` fallback (`FW_VERSION` from the compiler's build time, `FW_BUILD` empty) when a sketch has no `version.h`, computed at compile time; `iotVersionValid()` checks the convention.
+- `iot_status`: `IotStatusConfig.build`, shown as `device.build` after `firmware` in `/status`.
+- Tests: `test_iot_version` (host) and `tests/test_fw_version.sh` (the script in a temporary git repository), both in CI. Example `status_basic` reports `FW_VERSION` and `FW_BUILD`.
+- CI: the `tag` workflow creates `vX.Y.Z` after a merge to `main` when `library.properties` has a new version (and fails if it differs from `ESP32_IOT_COMMON_VERSION`). Releases no longer need a manual tag.
 
 - CI: the `tag` workflow creates `vX.Y.Z` after a merge to `main` when `library.properties` has a new version (and fails if it differs from `ESP32_IOT_COMMON_VERSION`). Releases no longer need a manual tag.
 

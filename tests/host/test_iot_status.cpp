@@ -36,7 +36,8 @@ static bool has(const String& s, const char* part) { return std::strstr(s.c_str(
 static IotStatusConfig config() {
   IotStatusConfig c;
   c.name = "backyard00";
-  c.firmware = "4.9.0";
+  c.firmware = "261122-1530";
+  c.build = "a1b2c3d";
   c.board = "ESP32 DEVKITV1 (ESP-WROOM-32)";
   c.ssid = "home";
   c.mqttServer = "broker.local";
@@ -71,7 +72,7 @@ static void test_device() {
   fake_uptime_us = 3600LL * 1000000;
   IotTime ntp;  // not synced
   String d = iotStatusDevice(config(), ntp, ESP_RST_POWERON, 2);
-  CHECK(has(d, "\"device\":{\"name\":\"backyard00\",\"firmware\":\"4.9.0\""));
+  CHECK(has(d, "\"device\":{\"name\":\"backyard00\",\"firmware\":\"261122-1530\",\"build\":\"a1b2c3d\","));
   CHECK(has(d, "\"board\":\"ESP32 DEVKITV1 (ESP-WROOM-32)\""));
   CHECK(has(d, "\"cpu_speed\":80,"));
   CHECK(has(d, "\"mac\":\"AA:BB:CC:DD:EE:FF\",\"ip\":\"10.0.0.5\""));
