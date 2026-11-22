@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- `iot_ota`: `IotOta`, over-the-air updates from the Arduino tools (`ArduinoOTA` with host name and password) and mDNS (`<host>.local` with the `http` and `ota` services). An optional function runs when an update starts (the garage releases its outputs there in M3). Replaces each device's `setupOTA()` and mDNS code (iot-platform architecture §6, phase 6 step 4).
+- Two small changes from the device code: the progress line no longer divides by zero for an image under 100 bytes (`progress * 100 / total`), and errors print as one line, `OTA Error[n]: text`.
+- Example `ota_basic`; host tests for `IotOta` with stand-ins for `ArduinoOTA` and `ESPmDNS`.
+
 ## 0.3.0
 
 - `iot_time`: `IotTime`, NTP time with a POSIX time zone (daylight saving automatic): `begin()` waits a limited time for the first sync (SNTP keeps trying in the background), `loop()` picks up a late sync, `synced()`, `epoch()`, `timestamp()`. Also `uptimeMillis()` and `uptimeSeconds()` from the 64-bit timer. Replaces each device's `setupTime()`, `getTimestamp()`, `getEpochTime()` and uptime helpers (iot-platform architecture §6, phase 6 step 4).

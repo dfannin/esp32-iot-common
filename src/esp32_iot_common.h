@@ -8,15 +8,17 @@
 // Modules:
 //   iot_mqtt.h        MQTT over TLS with a last will and a reconnect schedule (IotMqtt)
 //   iot_time.h        NTP time with the local time zone (IotTime), uptime since boot
+//   iot_ota.h         over-the-air updates from the Arduino tools, and mDNS (IotOta)
 //   wifi_diag.h       WiFi and antenna diagnostics, roaming (global object wifiDiag)
 //   stats_util.h      percentile() and shouldRoam(), no Arduino dependencies
 //   retry_schedule.h  reconnect timing and MQTT state texts, no Arduino dependencies
 
 #pragma once
 
-#define ESP32_IOT_COMMON_VERSION "0.3.0"
+#define ESP32_IOT_COMMON_VERSION "0.4.0"
 
 #include "iot_mqtt.h"
+#include "iot_ota.h"
 #include "iot_time.h"
 #include "retry_schedule.h"
 #include "stats_util.h"
