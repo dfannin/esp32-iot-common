@@ -7,13 +7,14 @@ Shared Arduino library for the home IoT ESP32 devices: [esp32-door](https://gith
 | Module | What it does |
 |---|---|
 | `iot_mqtt.h` / `.cpp` | MQTT over TLS with a last will and a reconnect schedule (`IotMqtt`): fast retries for 5 minutes after boot or a lost connection, then every minute; 10 s TLS handshake limit; connect count and last error for `/status`. TLS only, the broker certificate is always checked |
+| `iot_status.h` / `.cpp` | The common sections of `/status` (`device`, `network`, `mqtt`), the same fields on every device, and the text helpers `jsonEscape()`, `htmlEscape()`, `u64ToString()`, `formatUptime()`, `resetReasonText()` |
 | `iot_time.h` / `.cpp` | NTP time with a POSIX time zone (`IotTime`): limited wait at boot, late sync picked up in `loop()`, epoch and local timestamp; `uptimeMillis()` / `uptimeSeconds()` from the 64-bit timer |
 | `iot_ota.h` | Over-the-air updates from the Arduino tools and mDNS (`IotOta`): host name, password, `http` and `ota` services, optional function before an update starts. **Opt-in:** include `<iot_ota.h>` yourself; `esp32_iot_common.h` does not, so a sketch without OTA does not carry the core's ArduinoOTA and mDNS code (about 40 KB) |
 | `retry_schedule.h` | The reconnect timing and MQTT state texts, no Arduino dependencies, host-tested |
 | `wifi_diag.h` / `.cpp` | WiFi and antenna diagnostics: RSSI sampling and history, gateway ping, reception tests, access-point scan, roaming to a stronger access point (global object `wifiDiag`) |
 | `stats_util.h` | `percentile()` and `shouldRoam()`, no Arduino dependencies, host-tested |
 
-Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS (opt-in since 0.5.0). The device web page, the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
+Version 0.1.0 held the modules that were identical in all three device repositories; 0.2.0 adds the MQTT connection, 0.3.0 NTP time and uptime, 0.4.0 OTA updates and mDNS (opt-in since 0.5.0), 0.6.0 the common `/status` sections and text helpers. The device web pages stay in each device (they are built differently); the self-description (Home Assistant discovery) and settings follow in later versions, one device at a time (iot-platform architecture §6, §15.2 phases 5–6).
 
 Requires the **PubSubClient** library (Library Manager).
 
@@ -28,7 +29,7 @@ void loop()  { wifiDiag.loop(); }
 
 Modules that pull in a large part of the ESP32 core are **opt-in**: the umbrella header leaves them out and a sketch includes them itself (today `#include <iot_ota.h>`), so a sketch pays only for what it uses.
 
-See `examples/wifi_diag_basic/`, `examples/mqtt_basic/`, `examples/time_basic/` and `examples/ota_basic/`.
+See `examples/wifi_diag_basic/`, `examples/mqtt_basic/`, `examples/time_basic/`, `examples/ota_basic/` and `examples/status_basic/`.
 
 ## Install
 

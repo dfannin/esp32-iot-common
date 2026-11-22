@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+- `iot_status`: the common sections of every device's `/status` JSON, the same fields on every device (iot-platform open item O12): `iotStatusDevice()` (name, firmware, board, cpu_speed, mac, ip, uptime, time, time_synced, reset_reason, free_heap, min_free_heap, wifi_reconnects, plus device extras), `iotStatusNetwork()` (ssid, rssi, bssid, channel, hostname) and `iotStatusMqtt()` (broker, port, user, connected, connects, failed_attempts, disconnected_s while disconnected, last_error, last_error_uptime, status_topic, telemetry_topic). Settings in `IotStatusConfig`; the board description is passed by the device.
+- Text helpers moved from the devices, where they were identical: `jsonEscape()`, `htmlEscape()`, `u64ToString()`, `formatUptime()`, `resetReasonText()`.
+- Example `status_basic`; host tests for `iot_status` (the `String`, `WiFi` and `ESP` stand-ins in `tests/host/fakes/` grew for it).
+
 ## 0.5.0
 
 - `iot_ota` is opt-in: `esp32_iot_common.h` no longer includes it, and it is header-only (`iot_ota.cpp` removed). In 0.4.0 every sketch using the library linked the core's ArduinoOTA and mDNS code, 38–45 KB of flash even without OTA (the CI examples grew from 0.3.0 to 0.4.0: `mqtt_basic` +37.9 KB, `time_basic` +38.8 KB, `wifi_diag_basic` +44.7 KB). This breaks the rule that an unused feature costs nothing (CLAUDE.md rule 3).

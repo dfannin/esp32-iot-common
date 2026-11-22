@@ -7,6 +7,7 @@
 //
 // Modules:
 //   iot_mqtt.h        MQTT over TLS with a last will and a reconnect schedule (IotMqtt)
+//   iot_status.h      common /status JSON sections (device, network, mqtt), text helpers
 //   iot_time.h        NTP time with the local time zone (IotTime), uptime since boot
 //   iot_ota.h         over-the-air updates and mDNS (IotOta); opt-in, include it yourself:
 //                     #include <iot_ota.h>  (keeps ArduinoOTA out of sketches without OTA)
@@ -16,9 +17,10 @@
 
 #pragma once
 
-#define ESP32_IOT_COMMON_VERSION "0.5.0"
+#define ESP32_IOT_COMMON_VERSION "0.6.0"
 
 #include "iot_mqtt.h"
+#include "iot_status.h"
 #include "iot_time.h"
 #include "retry_schedule.h"
 #include "stats_util.h"
