@@ -57,7 +57,7 @@ make -C tests/host                                                     # host un
 for ex in examples/*/; do arduino-cli compile --fqbn esp32:esp32:esp32:PartitionScheme=min_spiffs --library . "$ex"; done
 ```
 
-**Versions:** bump `version` in `library.properties` and `ESP32_IOT_COMMON_VERSION` in `src/esp32_iot_common.h` together, add a line to `CHANGELOG.md`, merge, then tag `vX.Y.Z` on `main`.
+**Versions:** bump `version` in `library.properties` and `ESP32_IOT_COMMON_VERSION` in `src/esp32_iot_common.h` together and add a line to `CHANGELOG.md`. After the merge to `main`, the `tag` workflow (`.github/workflows/tag.yml`) creates the tag `vX.Y.Z` on that commit (it stops with an error if the two version numbers differ, and does nothing if the tag already exists).
 
 ## License
 

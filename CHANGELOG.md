@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- CI: the `tag` workflow creates `vX.Y.Z` after a merge to `main` when `library.properties` has a new version (and fails if it differs from `ESP32_IOT_COMMON_VERSION`). Releases no longer need a manual tag.
+
 ## 0.6.0
 
 - `iot_status`: the common sections of every device's `/status` JSON, the same fields on every device (iot-platform open item O12): `iotStatusDevice()` (name, firmware, board, cpu_speed, mac, ip, uptime, time, time_synced, reset_reason, free_heap, min_free_heap, wifi_reconnects, plus device extras), `iotStatusNetwork()` (ssid, rssi, bssid, channel, hostname) and `iotStatusMqtt()` (broker, port, user, connected, connects, failed_attempts, disconnected_s while disconnected, last_error, last_error_uptime, status_topic, telemetry_topic). Settings in `IotStatusConfig`; the board description is passed by the device.
