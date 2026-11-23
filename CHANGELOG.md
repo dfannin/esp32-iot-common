@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1
+
+- WiFi page: the "Signal, Last 10 Minutes" graph keeps -95 to -25 dBm by default and widens in 10 dB steps when the signal is stronger or weaker. A signal above -25 dBm (esp32-garage at -21 dBm, next to its access point) was drawn above the graph and looked as if the graph had stopped. The limit came from the garage's old page.
+- Browser tests: the graph's range and that the line is drawn at -60, -21 and -97 dBm.
+
 ## 0.8.0
 
 - `iot_web` (opt-in, header-only: `#include <iot_web.h>`): the web pages for every device (iot-platform architecture §6.5). One compressed page shell from flash; the browser draws it from `/status` with `/app.js`:

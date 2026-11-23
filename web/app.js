@@ -306,9 +306,15 @@ ${IOT.form('wtest', [
   draw(h) {
     const c = $('#graph'), x = c.getContext('2d'), W = c.width, H = c.height;
     x.clearRect(0, 0, W, H);
-    const lo = -95, hi = -25, y = v => H - (v - lo) / (hi - lo) * H;
+    // -95 to -25 dBm, widened (in 10 dB steps) when the signal is stronger or weaker,
+    // so a very strong signal (e.g. -21 dBm next to the access point) stays on the graph
+    const top = h.length ? Math.max(...h) : -60, bottom = h.length ? Math.min(...h) : -60;
+    const hi = Math.max(-25, Math.ceil((top + 5) / 10) * 10 - 5);
+    const lo = Math.min(-95, Math.floor((bottom - 5) / 10) * 10 + 5);
+    c.dataset.range = lo + ',' + hi;
+    const y = v => H - (v - lo) / (hi - lo) * H;
     x.font = '11px Arial'; x.fillStyle = '#666'; x.strokeStyle = '#ddd'; x.lineWidth = 1;
-    for (let v = -90; v <= -30; v += 10) {
+    for (let v = lo + 5; v < hi; v += 10) {
       x.beginPath(); x.moveTo(30, y(v)); x.lineTo(W, y(v)); x.stroke(); x.fillText(v, 0, y(v) + 4);
     }
     if (!h.length) return;
