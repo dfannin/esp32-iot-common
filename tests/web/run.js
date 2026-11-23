@@ -15,7 +15,7 @@ const FIX = path.join(__dirname, 'fixtures');
 const fixture = f => JSON.parse(fs.readFileSync(path.join(FIX, f), 'utf8'));
 
 // What the fake device serves; changed by the tests
-const device = {status: fixture('status_door.json'), script: '', posts: []};
+const device = {status: fixture('status_door.json'), script: '', posts: [], wifi: fixture('wifi.json')};
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://x');
@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
     case '/app.js': return send(200, 'application/javascript', fs.readFileSync(path.join(WEB, 'app.js')));
     case '/device.js': return send(200, 'application/javascript', device.script);
     case '/status': return json(device.status);
-    case '/api/wifi': return json(fixture('wifi.json'));
+    case '/api/wifi': return json(device.wifi);
     case '/api/wifi/test': return json({results: []});
     case '/api/wifi/scan': return json({status: 'done', networks: [
       {ssid: 'home', rssi: -50, channel: 9, bssid: '11:22:33:44:55:66', auth: 'WPA2', connected: true},
@@ -159,6 +159,22 @@ async function main() {
   await page.click('button[data-action="scan"]');
   await page.waitForFunction(() => document.querySelector('#scan').textContent.includes('other'), null, {timeout: 5000});
   check((await text('#scan')).indexOf('home') < (await text('#scan')).indexOf('other'), 'scan sorted by signal');
+
+  // The signal graph: its range follows the data, so a very strong signal stays visible
+  const linePixels = () => page.$eval('#graph', c => {
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    let k = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i] < 60 && d[i + 1] > 120 && d[i + 2] > 200) k++;
+    return k;
+  });
+  check(await page.$eval('#graph', c => c.dataset.range) === '-95,-25', 'graph range -95 to -25 dBm by default');
+  check(await linePixels() > 0, 'signal line drawn');
+  device.wifi = Object.assign({}, device.wifi, {history: Array(120).fill(-21)});
+  await page.waitForFunction(() => document.querySelector('#graph').dataset.range === '-95,-15', null, {timeout: 5000});
+  check(await linePixels() > 0, 'a -21 dBm signal (above -25) is still drawn');
+  device.wifi = Object.assign({}, device.wifi, {history: Array(120).fill(-97)});
+  await page.waitForFunction(() => document.querySelector('#graph').dataset.range === '-105,-25', null, {timeout: 5000});
+  check(await linePixels() > 0, 'a -97 dBm signal (below -95) is still drawn');
 
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   await browser.close();
