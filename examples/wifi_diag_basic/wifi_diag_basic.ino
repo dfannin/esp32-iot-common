@@ -16,7 +16,7 @@ void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  wifiDiag.begin(true);  // mains powered: ping the gateway all the time
+  wifiDiag.begin(true);  // troubleshooting: ping the gateway all the time (the default pings only for the WiFi page)
   wifiDiag.setRoaming(true, 2UL * 60 * 60 * 1000, 8);
   Serial.printf("esp32-iot-common %s\n", ESP32_IOT_COMMON_VERSION);
 }

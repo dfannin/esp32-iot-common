@@ -43,7 +43,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) delay(500);
-  wifiDiag.begin(true);
+  wifiDiag.begin();  // ping the gateway only while the WiFi page is open or during a test
   ntp.begin("PST8PDT,M3.2.0,M11.1.0", "pool.ntp.org", 30000);
 
   IotMqttConfig mc;

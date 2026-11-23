@@ -1,8 +1,9 @@
 // wifi_diag.h - WiFi and antenna diagnostics (design section 9.3)
 //
-// Samples RSSI once a second, pings the gateway once a second (ESP-IDF
-// ping_sock), keeps a 10-minute RSSI history for the /wifi graph, rolling
-// statistics for telemetry, and runs reception tests: each test records where
+// Samples RSSI once a second (a local reading, no transmission), pings the
+// gateway once a second (ESP-IDF ping_sock) only while the WiFi page is open or
+// a reception test runs, keeps a 10-minute RSSI history for the /wifi graph,
+// rolling statistics for telemetry, and runs reception tests: each test records where
 // it was taken (position, x/y/height in feet, antenna), the signal and latency
 // statistics, disconnects and access-point changes during the test, and a scan
 // of the access points and same-channel networks at the end.
@@ -81,10 +82,12 @@ class WifiDiag {
   static const int MAX_RESULTS = 10;
   static const int MAX_TEST_S = 600;
 
-  // backgroundPing: ping the gateway all the time (rolling statistics for the
-  // telemetry). false for battery-powered nodes: ping only during a test and
-  // while someone looks at the WiFi page (for a minute after the last request).
-  void begin(bool backgroundPing = true);
+  // By default the gateway is pinged only during a reception test and while
+  // someone looks at the WiFi page (for a minute after the last request), so the
+  // radio is not kept busy and no ping data is collected otherwise (iot-platform
+  // architecture 0.26). backgroundPing = true pings all the time (once a second),
+  // for troubleshooting a link.
+  void begin(bool backgroundPing = false);
   void loop();
 
   // Rolling statistics since the last call (telemetry/garage/wifi)

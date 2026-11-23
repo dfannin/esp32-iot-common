@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+- `wifi_diag`: the gateway is pinged only while the WiFi page is open (for a minute after its last request) and during a reception test. `begin()` now defaults to `backgroundPing = false` (was `true`); `begin(true)` still pings all the time, for troubleshooting. Pinging once a second kept the radio busy and its statistics were sent in the 5-minute telemetry, which is no longer wanted (iot-platform architecture 0.26). Reception tests keep their ping results.
+- Behavior change for sketches calling `begin()` without an argument: they stop pinging in the background.
+
 ## 0.8.1
 
 - WiFi page: the "Signal, Last 10 Minutes" graph keeps -95 to -25 dBm by default and widens in 10 dB steps when the signal is stronger or weaker. A signal above -25 dBm (esp32-garage at -21 dBm, next to its access point) was drawn above the graph and looked as if the graph had stopped. The limit came from the garage's old page.

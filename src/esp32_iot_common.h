@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define ESP32_IOT_COMMON_VERSION "0.8.1"
+#define ESP32_IOT_COMMON_VERSION "0.9.0"
 
 #include "iot_mqtt.h"
 #include "iot_status.h"
